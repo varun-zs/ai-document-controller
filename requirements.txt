@@ -1,0 +1,37 @@
+# Microsoft Agent Framework + Foundry hosted-agent runtime.
+#
+# Do NOT install the `agent-framework` meta-package: it pulls in
+# `agent-framework-core[all]`, whose `[all]` extra includes
+# `agent-framework-hyperlight`, which requires `hyperlight-sandbox-backend-wasm`
+# (no distribution in the Foundry remote-build env) or `core>=1.11.0` (conflicts
+# with the 1.10.0 API this app targets). Both make the resolver fail.
+#
+# Instead install only the sub-packages this app actually imports, all pinned to
+# the same 1.10.0 core line so the resolver has exactly one solution:
+#   - agent-framework-core        -> `agent_framework` (Agent, FunctionTool, ToolTypes)
+#   - agent-framework-foundry     -> `agent_framework.foundry` (FoundryChatClient)
+#   - agent-framework-foundry-hosting -> `agent_framework_foundry_hosting` (ResponsesHostServer)
+#
+# Version pinning matters: the Foundry hosting package is alpha-only.
+#   - a260709+ require core>=1.11.0 (whose API dropped the top-level names).
+#   - a260630 requires core>=1.10.0 BUT speaks agent protocol 2.0.0, which the
+#     current Foundry hosted environment does NOT serve (it runs protocol 1.0.0),
+#     causing a runtime RuntimeError on the first chat request.
+#   - a260618 requires core>=1.9.0 (satisfied by 1.10.0) and still speaks
+#     protocol 1.0.0, matching the hosted environment. This is the newest pin
+#     that is <= a260625 (the cutover point) per the runtime error guidance.
+# A bare hosting name also resolves to no stable release, so the explicit
+# pre-release pin is required.
+agent-framework-core==1.10.0
+agent-framework-foundry==1.10.0
+agent-framework-foundry-hosting==1.0.0a260618
+# `agent-framework-foundry-hosting` a260618 imports `mcp` (from mcp import
+# McpError) but does NOT declare it in its requires-dist (only a260709+ pin
+# `mcp<2,>=1.24.0`). Without this line the container starts, fails to import the
+# hosting module (ModuleNotFoundError: No module named 'mcp'), never serves
+# /readiness 200, and the chat fails with session_not_ready. Pin it explicitly.
+mcp<2,>=1.24.0
+# Managed-identity / DefaultAzureCredential auth to the Foundry project.
+azure-identity
+# Local .env loading for development (no-op in the hosted container).
+python-dotenv

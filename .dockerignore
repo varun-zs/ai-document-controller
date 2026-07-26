@@ -1,0 +1,12 @@
+# Keep the ACR build context small and free of local-only / secret files.
+.venv/
+.git/
+.github/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.env
+.env.sample
+generated_documents/
+README.md

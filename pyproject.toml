@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nc-document-controller"
+version = "0.1.0"
+description = "Nexa Holdings NC-Document-Controller hosted agent for Microsoft Foundry Agent Service"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "Proprietary" }
+authors = [{ name = "Nexa Holdings" }]
+# NOTE: keep these in sync with requirements.txt, which is what Foundry's
+# remote build installs; see requirements.txt for the full pinning rationale
+# (1.10.0 core API line + protocol-1.0.0-compatible hosting alpha + mcp).
+dependencies = [
+    "agent-framework-core==1.10.0",
+    "agent-framework-foundry==1.10.0",
+    "agent-framework-foundry-hosting==1.0.0a260618",
+    "mcp>=1.24.0,<2",
+    "azure-identity",
+    "python-dotenv",
+]
+
+[tool.setuptools]
+packages = ["agents"]
+py-modules = ["config", "main"]

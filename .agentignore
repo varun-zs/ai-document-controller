@@ -1,0 +1,14 @@
+# Files excluded from the direct-code-deploy package uploaded to Foundry.
+# Foundry builds the runtime image from the remaining source + requirements.txt.
+.git/
+.github/
+.venv/
+__pycache__/
+*.pyc
+.env
+.azure/
+# Container build is not used (direct code deploy); keep it out of the package.
+Dockerfile
+README.md
+# Local-only developer diagnostics / smoke tests; not imported by the runtime.
+scripts/

@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: nc-document-controller
+services:
+    nc-document-controller:
+        project: .
+        host: azure.ai.agent
+        language: python
+        codeConfiguration:
+            dependencyResolution: remote_build
+            entryPoint: main.py
+            runtime: python_3_13
+        container:
+            resources:
+                cpu: "1"
+                memory: 2Gi
+        environmentVariables:
+            - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
+              value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+            - name: FOUNDRY_TOOLBOX_MCP_URL
+              value: ${FOUNDRY_TOOLBOX_MCP_URL}
+            - name: SSE_KEEPALIVE_INTERVAL
+              value: "15"
+        kind: hosted
+        name: NC-Document-Controller
+        protocols:
+            - protocol: responses
+              version: 1.0.0

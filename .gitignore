@@ -1,0 +1,16 @@
+# Environment
+.env
+.claude
+
+# Azure Developer CLI environments (local state; CI creates its own)
+.azure/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+
+# Generated output
+generated_documents/
